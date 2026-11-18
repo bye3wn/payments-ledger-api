@@ -48,6 +48,24 @@ public class Account {
         this.createdAt = Instant.now();
     }
 
+    /** Takes money out. The caller has already checked the balance; this is a last line of defense. */
+    public void withdraw(long amountCents) {
+        if (amountCents <= 0) {
+            throw new IllegalArgumentException("amount must be positive");
+        }
+        if (amountCents > balanceCents) {
+            throw new IllegalStateException("insufficient funds");
+        }
+        balanceCents -= amountCents;
+    }
+
+    public void deposit(long amountCents) {
+        if (amountCents <= 0) {
+            throw new IllegalArgumentException("amount must be positive");
+        }
+        balanceCents = Math.addExact(balanceCents, amountCents);
+    }
+
     public Long getId() { return id; }
     public String getOwnerName() { return ownerName; }
     public String getCurrency() { return currency; }
